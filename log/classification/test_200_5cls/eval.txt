@@ -1,0 +1,76 @@
+2025-11-16 16:01:51,190 - Model - INFO - PARAMETER ...
+2025-11-16 16:01:51,190 - Model - INFO - Namespace(batch_size=24, gpu='0', num_point=1024, log_dir='test_200_5cls', normal=True, num_votes=3, single_file='data/modelnet5_normal_resampled/bathtub/bathtub_0002.txt', uniform=False, shape_names_file='modelnet5_shape_names.txt', train_file='modelnet5_train.txt', test_file='modelnet5_test.txt', data_path='data/modelnet5_normal_resampled/')
+2025-11-16 16:01:51,191 - Model - INFO - Load dataset ...
+2025-11-16 16:01:51,197 - Model - INFO - Number of classes: 5
+2025-11-16 16:01:51,776 - Model - INFO - ==================================================
+2025-11-16 16:01:51,776 - Model - INFO - Classifying single point cloud file: data/modelnet5_normal_resampled/bathtub/bathtub_0002.txt
+2025-11-16 16:01:51,777 - Model - INFO - ==================================================
+2025-11-16 16:01:55,989 - Model - INFO - ==================================================
+2025-11-16 16:01:55,989 - Model - INFO - Classification Result:
+2025-11-16 16:01:55,990 - Model - INFO -   Predicted Class: bathtub (ID: 1)
+2025-11-16 16:01:55,990 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-11-16 16:01:55,990 - Model - INFO - ==================================================
+2025-11-16 16:01:55,991 - Model - INFO - Top 5 Predictions:
+2025-11-16 16:01:55,994 - Model - INFO -   1. bathtub: 1.0000 (100.00%)
+2025-11-16 16:01:55,995 - Model - INFO -   2. bookshelf: 0.0000 (0.00%)
+2025-11-16 16:01:55,996 - Model - INFO -   3. bed: 0.0000 (0.00%)
+2025-11-16 16:01:55,996 - Model - INFO -   4. bench: 0.0000 (0.00%)
+2025-11-16 16:01:55,996 - Model - INFO -   5. airplane: 0.0000 (0.00%)
+2025-11-16 16:01:55,997 - Model - INFO - ==================================================
+2025-11-21 20:22:12,479 - Model - INFO - PARAMETER ...
+2025-11-21 20:22:12,482 - Model - INFO - Namespace(batch_size=24, gpu='0', num_point=1024, log_dir='test_200_5cls', normal=True, num_votes=3, single_file='data/modelnet5_normal_resampled/bathtub/bathtub_0002.txt', uniform=False, shape_names_file='modelnet5_shape_names.txt', train_file='modelnet5_train.txt', test_file='modelnet5_test.txt', data_path='data/modelnet5_normal_resampled/')
+2025-11-21 20:22:12,482 - Model - INFO - Load dataset ...
+2025-11-21 20:22:12,484 - Model - INFO - Number of classes: 5
+2025-11-21 20:22:12,870 - Model - INFO - ==================================================
+2025-11-21 20:22:12,870 - Model - INFO - Classifying single point cloud file: data/modelnet5_normal_resampled/bathtub/bathtub_0002.txt
+2025-11-21 20:22:12,870 - Model - INFO - ==================================================
+2025-11-21 20:22:15,238 - Model - INFO - ==================================================
+2025-11-21 20:22:15,238 - Model - INFO - Classification Result:
+2025-11-21 20:22:15,238 - Model - INFO -   Predicted Class: bathtub (ID: 1)
+2025-11-21 20:22:15,238 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-11-21 20:22:15,238 - Model - INFO - ==================================================
+2025-11-21 20:22:15,238 - Model - INFO - Top 5 Predictions:
+2025-11-21 20:22:15,243 - Model - INFO -   1. bathtub: 1.0000 (100.00%)
+2025-11-21 20:22:15,243 - Model - INFO -   2. bookshelf: 0.0000 (0.00%)
+2025-11-21 20:22:15,243 - Model - INFO -   3. bed: 0.0000 (0.00%)
+2025-11-21 20:22:15,243 - Model - INFO -   4. bench: 0.0000 (0.00%)
+2025-11-21 20:22:15,243 - Model - INFO -   5. airplane: 0.0000 (0.00%)
+2025-11-21 20:22:15,243 - Model - INFO - ==================================================
+2025-11-21 20:30:53,599 - Model - INFO - PARAMETER ...
+2025-11-21 20:30:53,599 - Model - INFO - Namespace(batch_size=24, gpu='0', num_point=1024, log_dir='test_200_5cls', normal=True, num_votes=3, single_file='data/test/airplane_0501.txt', uniform=False, shape_names_file='modelnet5_shape_names.txt', train_file='modelnet5_train.txt', test_file='modelnet5_test.txt', data_path='data/modelnet5_normal_resampled/')
+2025-11-21 20:30:53,599 - Model - INFO - Load dataset ...
+2025-11-21 20:30:53,605 - Model - INFO - Number of classes: 5
+2025-11-21 20:30:53,897 - Model - INFO - ==================================================
+2025-11-21 20:30:53,897 - Model - INFO - Classifying single point cloud file: data/test/airplane_0501.txt
+2025-11-21 20:30:53,897 - Model - INFO - ==================================================
+2025-11-21 20:30:56,150 - Model - INFO - ==================================================
+2025-11-21 20:30:56,150 - Model - INFO - Classification Result:
+2025-11-21 20:30:56,150 - Model - INFO -   Predicted Class: airplane (ID: 0)
+2025-11-21 20:30:56,150 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-11-21 20:30:56,150 - Model - INFO - ==================================================
+2025-11-21 20:30:56,150 - Model - INFO - Top 5 Predictions:
+2025-11-21 20:30:56,150 - Model - INFO -   1. airplane: 1.0000 (100.00%)
+2025-11-21 20:30:56,155 - Model - INFO -   2. bench: 0.0000 (0.00%)
+2025-11-21 20:30:56,160 - Model - INFO -   3. bookshelf: 0.0000 (0.00%)
+2025-11-21 20:30:56,160 - Model - INFO -   4. bed: 0.0000 (0.00%)
+2025-11-21 20:30:56,160 - Model - INFO -   5. bathtub: 0.0000 (0.00%)
+2025-11-21 20:30:56,160 - Model - INFO - ==================================================
+2025-11-21 20:32:08,297 - Model - INFO - PARAMETER ...
+2025-11-21 20:32:08,300 - Model - INFO - Namespace(batch_size=24, gpu='0', num_point=1024, log_dir='test_200_5cls', normal=True, num_votes=3, single_file='data/test/airplane_0501.txt', uniform=False, shape_names_file='modelnet5_shape_names.txt', train_file='modelnet5_train.txt', test_file='modelnet5_test.txt', data_path='data/modelnet5_normal_resampled/')
+2025-11-21 20:32:08,300 - Model - INFO - Load dataset ...
+2025-11-21 20:32:08,302 - Model - INFO - Number of classes: 5
+2025-11-21 20:32:08,511 - Model - INFO - ==================================================
+2025-11-21 20:32:08,511 - Model - INFO - Classifying single point cloud file: data/test/airplane_0501.txt
+2025-11-21 20:32:08,511 - Model - INFO - ==================================================
+2025-11-21 20:32:10,125 - Model - INFO - ==================================================
+2025-11-21 20:32:10,125 - Model - INFO - Classification Result:
+2025-11-21 20:32:10,125 - Model - INFO -   Predicted Class: airplane (ID: 0)
+2025-11-21 20:32:10,125 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-11-21 20:32:10,125 - Model - INFO - ==================================================
+2025-11-21 20:32:10,125 - Model - INFO - Top 5 Predictions:
+2025-11-21 20:32:10,125 - Model - INFO -   1. airplane: 1.0000 (100.00%)
+2025-11-21 20:32:10,125 - Model - INFO -   2. bench: 0.0000 (0.00%)
+2025-11-21 20:32:10,130 - Model - INFO -   3. bookshelf: 0.0000 (0.00%)
+2025-11-21 20:32:10,130 - Model - INFO -   4. bed: 0.0000 (0.00%)
+2025-11-21 20:32:10,130 - Model - INFO -   5. bathtub: 0.0000 (0.00%)
+2025-11-21 20:32:10,130 - Model - INFO - ==================================================
