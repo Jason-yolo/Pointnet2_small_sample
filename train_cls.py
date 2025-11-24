@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 import os
 import torch
-import datetime 
+import datetime
 import logging
 from pathlib import Path
 from tqdm import tqdm
@@ -37,9 +37,9 @@ def parse_args():
     parser.add_argument('--normal', dest='normal', action='store_true', default=True, help='Whether to use normal information [default: True]')
     parser.add_argument('--no_normal', dest='normal', action='store_false', help='Disable normal information')
     parser.add_argument('--num_workers', type=int, default=8, help='number of workers for data loading [default: 8]')
-    parser.add_argument('--shape_names_file', type=str, default='data/modelnet5_normal_resampled/modelnet5_shape_names.txt', help='shape names file [default: modelnet5_shape_names.txt]')
-    parser.add_argument('--train_file', type=str, default='data/modelnet5_normal_resampled/modelnet5_train.txt', help='training file list [default: modelnet5_train.txt]')
-    parser.add_argument('--test_file', type=str, default='data/modelnet5_normal_resampled/modelnet5_test.txt', help='test file list [default: modelnet5_test.txt]')
+    parser.add_argument('--shape_names_file', type=str, default='D:\研究生_study\cloudpoint_learn\Pointnet2_small_sample\data\modelnet5_normal_resampled\modelnet5_shape_names.txt', help='shape names file [default: modelnet5_shape_names.txt]')
+    parser.add_argument('--train_file', type=str, default='modelnet5_train.txt', help='training file list [default: modelnet5_train.txt]')
+    parser.add_argument('--test_file', type=str, default='modelnet5_test.txt', help='test file list [default: modelnet5_test.txt]')
     parser.add_argument('--data_path', type=str, default='data/modelnet5_normal_resampled', help='data directory path [default: data/modelnet5_normal_resampled]')
     return parser.parse_args()
 
@@ -112,28 +112,33 @@ def main(args):
     log_string('Load dataset ...')
     DATA_PATH = resolve_path(args.data_path)
 
+    # 关键修改：提取文件名（即使参数带路径也只取文件名）
+    shape_names_file = Path(args.shape_names_file).name
+    train_file = Path(args.train_file).name
+    test_file = Path(args.test_file).name
+
     TRAIN_DATASET = ModelNetDataLoader(root=str(DATA_PATH), npoint=args.num_point, split='train',
                                                      normal_channel=args.normal,
-                                                     shape_names_file=args.shape_names_file,
-                                                     train_file=args.train_file,
-                                                     test_file=args.test_file)
+                                                     shape_names_file=shape_names_file,
+                                                     train_file=train_file,
+                                                     test_file=test_file)
     TEST_DATASET = ModelNetDataLoader(root=str(DATA_PATH), npoint=args.num_point, split='test',
                                                     normal_channel=args.normal,
-                                                    shape_names_file=args.shape_names_file,
-                                                    train_file=args.train_file,
-                                                    test_file=args.test_file)
+                                                    shape_names_file=shape_names_file,
+                                                    train_file=train_file,
+                                                    test_file=test_file)
     trainDataLoader = torch.utils.data.DataLoader(
-        TRAIN_DATASET, 
-        batch_size=args.batch_size, 
-        shuffle=True, 
+        TRAIN_DATASET,
+        batch_size=args.batch_size,
+        shuffle=True,
         num_workers=args.num_workers,
         pin_memory=True,        # 加速数据传输到GPU
         drop_last=True          # 丢弃最后不完整的batch，保持batch size一致
     )
     testDataLoader = torch.utils.data.DataLoader(
-        TEST_DATASET, 
-        batch_size=args.batch_size, 
-        shuffle=False, 
+        TEST_DATASET,
+        batch_size=args.batch_size,
+        shuffle=False,
         num_workers=args.num_workers,
         pin_memory=True         # 加速数据传输到GPU
     )
