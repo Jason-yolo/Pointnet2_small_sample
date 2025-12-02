@@ -179,3 +179,45 @@ FileNotFoundError: Point cloud file not found: D:\研究生_study\cloudpoint_learn\
 2025-12-01 23:53:30,098 - Model - INFO - ==================================================
 2025-12-01 23:53:30,098 - Model - INFO - 开始可视化点云...
 2025-12-01 23:55:09,242 - Model - INFO - 可视化完成
+2025-12-02 16:24:42,651 - Model - INFO - PARAMETER ...
+2025-12-02 16:24:42,652 - Model - INFO - Namespace(batch_size=24, data_path='data/modelnet5_normal_resampled/', gpu='0', log_dir='test_200_5cls', normal=True, num_point=1024, num_votes=1, save_results=False, shape_names_file='modelnet5_shape_names.txt', single_file='data/test/airplane_0500.txt', test_file='modelnet5_test.txt', train_file='modelnet5_train.txt', uniform=False, visualization_dir='visualization_results', visualize=True)
+2025-12-02 16:24:42,653 - Model - INFO - Load dataset ...
+2025-12-02 16:24:42,680 - Model - INFO - Number of classes: 5
+2025-12-02 16:24:42,807 - Model - INFO - ==================================================
+2025-12-02 16:24:42,808 - Model - INFO - Classifying single point cloud file: data/test/airplane_0500.txt
+2025-12-02 16:24:42,808 - Model - INFO - ==================================================
+2025-12-02 16:24:43,610 - Model - INFO - ==================================================
+2025-12-02 16:24:43,610 - Model - INFO - Classification Result:
+2025-12-02 16:24:43,610 - Model - INFO -   Predicted Class: airplane (ID: 0)
+2025-12-02 16:24:43,611 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-12-02 16:24:43,611 - Model - INFO - ==================================================
+2025-12-02 16:24:43,611 - Model - INFO - Top 5 Predictions:
+2025-12-02 16:24:43,612 - Model - INFO -   1. airplane: 1.0000 (100.00%)
+2025-12-02 16:24:43,612 - Model - INFO -   2. bench: 0.0000 (0.00%)
+2025-12-02 16:24:43,612 - Model - INFO -   3. bookshelf: 0.0000 (0.00%)
+2025-12-02 16:24:43,612 - Model - INFO -   4. bathtub: 0.0000 (0.00%)
+2025-12-02 16:24:43,613 - Model - INFO -   5. bed: 0.0000 (0.00%)
+2025-12-02 16:24:43,613 - Model - INFO - ==================================================
+2025-12-02 16:24:43,613 - Model - INFO - 开始可视化点云...
+2025-12-02 17:04:02,001 - Model - INFO - 可视化完成
+2025-12-02 17:27:19,779 - Model - INFO - PARAMETER ...
+2025-12-02 17:27:19,779 - Model - INFO - Namespace(batch_size=24, data_path='data/modelnet5_normal_resampled/', gpu='0', log_dir='test_200_5cls', normal=True, num_point=1024, num_votes=1, save_results=False, shape_names_file='modelnet5_shape_names.txt', single_file='data/test/airplane_0500.txt', test_file='modelnet5_test.txt', train_file='modelnet5_train.txt', uniform=False, visualization_dir='visualization_results', visualize=True)
+2025-12-02 17:27:19,779 - Model - INFO - Load dataset ...
+2025-12-02 17:27:19,783 - Model - INFO - Number of classes: 5
+2025-12-02 17:27:19,858 - Model - INFO - ==================================================
+2025-12-02 17:27:19,858 - Model - INFO - Classifying single point cloud file: data/test/airplane_0500.txt
+2025-12-02 17:27:19,858 - Model - INFO - ==================================================
+2025-12-02 17:27:20,664 - Model - INFO - ==================================================
+2025-12-02 17:27:20,664 - Model - INFO - Classification Result:
+2025-12-02 17:27:20,665 - Model - INFO -   Predicted Class: airplane (ID: 0)
+2025-12-02 17:27:20,665 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-12-02 17:27:20,665 - Model - INFO - ==================================================
+2025-12-02 17:27:20,665 - Model - INFO - Top 5 Predictions:
+2025-12-02 17:27:20,666 - Model - INFO -   1. airplane: 1.0000 (100.00%)
+2025-12-02 17:27:20,666 - Model - INFO -   2. bench: 0.0000 (0.00%)
+2025-12-02 17:27:20,667 - Model - INFO -   3. bookshelf: 0.0000 (0.00%)
+2025-12-02 17:27:20,667 - Model - INFO -   4. bathtub: 0.0000 (0.00%)
+2025-12-02 17:27:20,668 - Model - INFO -   5. bed: 0.0000 (0.00%)
+2025-12-02 17:27:20,668 - Model - INFO - ==================================================
+2025-12-02 17:27:20,668 - Model - INFO - 开始可视化点云...
+2025-12-02 17:27:54,844 - Model - INFO - 可视化完成

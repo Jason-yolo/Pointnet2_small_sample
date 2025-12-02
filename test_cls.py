@@ -12,8 +12,28 @@ import matplotlib
 import sys
 import os
 
+# 检查是否在headless环境中
+is_headless = False
+try:
+    # 检查是否存在DISPLAY环境变量(Linux/Unix系统)
+    if sys.platform.startswith('linux') and 'DISPLAY' not in os.environ:
+        is_headless = True
+    # 检查是否设置了PYTEST_CURRENT_TEST(测试环境)
+    elif 'PYTEST_CURRENT_TEST' in os.environ:
+        is_headless = True
+    # 检查是否在CI环境中
+    elif any(key in os.environ for key in ['CI', 'CONTINUOUS_INTEGRATION', 'JENKINS_URL']):
+        is_headless = True
+except:
+    is_headless = False
+
 # 尝试设置合适的后端
-if sys.platform.startswith('linux'):
+if is_headless:
+    # 在headless环境中，直接使用非交互式后端
+    matplotlib.use('Agg')
+    print("注意: 当前环境为无图形界面(headless)模式，将使用Agg后端")
+    print("可视化结果将自动保存为图像文件")
+elif sys.platform.startswith('linux'):
     # 在Linux上，先尝试使用TkAgg后端
     try:
         matplotlib.use('TkAgg')
@@ -228,6 +248,7 @@ def visualize_pointcloud_with_prediction(point_cloud, file_path, pred_class, pre
         confidence: 预测置信度
         class_names: 类别名称列表
         save_path: 是否保存可视化结果，如果为None则不保存
+        visualization_dir: 可视化结果保存目录
     """
     # 为每个类别分配不同的颜色
     colors = np.array([
@@ -306,40 +327,78 @@ def visualize_pointcloud_with_prediction(point_cloud, file_path, pred_class, pre
     
     plt.tight_layout()
     
-    # 保存结果（如果指定了路径）
-    if save_path:
-        if not os.path.exists(os.path.dirname(save_path)):
-            os.makedirs(os.path.dirname(save_path))
-        plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"可视化结果已保存到: {save_path}")
+    # 检查是否在headless环境中 - 最高优先级检查
+    try:
+        # 检查是否设置了is_headless变量
+        if 'is_headless' in globals() and is_headless:
+            # 在headless环境中，确保创建可视化目录并保存图像
+            if not os.path.exists(visualization_dir):
+                os.makedirs(visualization_dir, exist_ok=True)
+            
+            # 如果没有指定保存路径，使用默认路径
+            if not save_path:
+                save_path = os.path.join(
+                    visualization_dir,
+                    os.path.basename(file_path).replace('.txt', '_visualization.png')
+                )
+            
+            # 保存图像
+            plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            print(f"当前环境为无图形界面(headless)模式，已自动保存图像: {save_path}")
+            plt.close()
+            return
+    except:
+        # 如果检查失败，继续执行
+        pass
     
     # 检查当前后端是否支持交互式显示
     is_interactive = matplotlib.get_backend() not in ['Agg', 'Cairo', 'pdf', 'svg', 'ps']
     
-    # 如果需要保存结果，但用户没有指定路径，则在非交互式后端下自动保存
-    if not is_interactive and not save_path:
-        # 创建默认的保存路径
-        if not os.path.exists(visualization_dir):
-            os.makedirs(visualization_dir)
-        save_path = os.path.join(
-            visualization_dir,
-            os.path.basename(file_path).replace('.txt', '_visualization.png')
-        )
+    # 无论环境如何，首先确保创建可视化目录
+    if not os.path.exists(visualization_dir):
+        os.makedirs(visualization_dir, exist_ok=True)
+    
+    # 如果需要保存或在非交互式环境中，确保图像被保存
+    if save_path or not is_interactive:
+        if not save_path:
+            save_path = os.path.join(
+                visualization_dir,
+                os.path.basename(file_path).replace('.txt', '_visualization.png')
+            )
+        
+        # 确保保存目录存在
+        if not os.path.exists(os.path.dirname(save_path)):
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            
         # 保存图像
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"注意: 当前使用非交互式后端({matplotlib.get_backend()})，无法显示窗口")
-        print(f"可视化结果已自动保存到: {save_path}")
-    elif is_interactive:
-        # 交互式后端，显示图形窗口
+        print(f"可视化结果已保存到: {save_path}")
+    
+    # 只有在交互式后端且不需要保存的情况下才显示窗口
+    if is_interactive:
         print("\nmatplotlib可视化窗口已打开:")
         print("  - 拖动鼠标: 旋转视角")
         print("  - 鼠标滚轮: 缩放")
         print("  - 's'键: 保存当前视图")
         print("  - 'q'键: 关闭窗口")
-        plt.show()
+        try:
+            plt.show()
+        except Exception as e:
+            # 如果显示失败，至少确保图像已保存
+            if not save_path:
+                save_path = os.path.join(
+                    visualization_dir,
+                    os.path.basename(file_path).replace('.txt', '_visualization.png')
+                )
+                plt.savefig(save_path, dpi=300, bbox_inches='tight')
+                print(f"显示窗口失败: {str(e)}")
+                print(f"已保存图像到: {save_path}")
+            plt.close()
     else:
-        # 非交互式后端且用户已指定保存路径，仅保存图像
-        print(f"注意: 当前使用非交互式后端({matplotlib.get_backend()})，无法显示窗口")
+        # 非交互式后端，关闭窗口
+        plt.close()
+        if not save_path:  # 这种情况不应该发生，因为上面已经处理了保存逻辑
+            print(f"注意: 当前使用非交互式后端({matplotlib.get_backend()})，无法显示窗口")
 
 def main(args):
     def log_string(str):
