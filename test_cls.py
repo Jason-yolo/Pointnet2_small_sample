@@ -7,6 +7,29 @@ import logging
 from tqdm import tqdm
 import sys
 import importlib
+import matplotlib
+# 自动检测并设置matplotlib后端
+import sys
+import os
+
+# 尝试设置合适的后端
+if sys.platform.startswith('linux'):
+    # 在Linux上，先尝试使用TkAgg后端
+    try:
+        matplotlib.use('TkAgg')
+    except ImportError:
+        # 如果TkAgg不可用，尝试Qt5Agg
+        try:
+            matplotlib.use('Qt5Agg')
+        except ImportError:
+            # 如果都不可用，使用Agg后端(非交互式，但至少可以保存图像)
+            matplotlib.use('Agg')
+            print("警告: 未找到可用的交互式后端，将使用Agg后端(仅能保存图像，无法显示窗口)")
+            print("如需在Linux上显示交互式窗口，请安装python3-tk或pyqt5")
+else:
+    # 在Windows和其他系统上使用默认后端
+    pass
+
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -193,7 +216,7 @@ def save_classification_results(file_path, pred_class, pred_class_name, confiden
     
     return result_path
 
-def visualize_pointcloud_with_prediction(point_cloud, file_path, pred_class, pred_class_name, confidence, class_names, save_path=None):
+def visualize_pointcloud_with_prediction(point_cloud, file_path, pred_class, pred_class_name, confidence, class_names, save_path=None, visualization_dir='visualization_results'):
     """
     使用matplotlib可视化点云，并显示分类结果
     
@@ -290,13 +313,33 @@ def visualize_pointcloud_with_prediction(point_cloud, file_path, pred_class, pre
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
         print(f"可视化结果已保存到: {save_path}")
     
-    # 显示图形
-    print("\nmatplotlib可视化窗口已打开:")
-    print("  - 拖动鼠标: 旋转视角")
-    print("  - 鼠标滚轮: 缩放")
-    print("  - 's'键: 保存当前视图")
-    print("  - 'q'键: 关闭窗口")
-    plt.show()
+    # 检查当前后端是否支持交互式显示
+    is_interactive = matplotlib.get_backend() not in ['Agg', 'Cairo', 'pdf', 'svg', 'ps']
+    
+    # 如果需要保存结果，但用户没有指定路径，则在非交互式后端下自动保存
+    if not is_interactive and not save_path:
+        # 创建默认的保存路径
+        if not os.path.exists(visualization_dir):
+            os.makedirs(visualization_dir)
+        save_path = os.path.join(
+            visualization_dir,
+            os.path.basename(file_path).replace('.txt', '_visualization.png')
+        )
+        # 保存图像
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"注意: 当前使用非交互式后端({matplotlib.get_backend()})，无法显示窗口")
+        print(f"可视化结果已自动保存到: {save_path}")
+    elif is_interactive:
+        # 交互式后端，显示图形窗口
+        print("\nmatplotlib可视化窗口已打开:")
+        print("  - 拖动鼠标: 旋转视角")
+        print("  - 鼠标滚轮: 缩放")
+        print("  - 's'键: 保存当前视图")
+        print("  - 'q'键: 关闭窗口")
+        plt.show()
+    else:
+        # 非交互式后端且用户已指定保存路径，仅保存图像
+        print(f"注意: 当前使用非交互式后端({matplotlib.get_backend()})，无法显示窗口")
 
 def main(args):
     def log_string(str):
@@ -423,7 +466,8 @@ def main(args):
                     pred_class_name, 
                     confidence, 
                     class_names,
-                    save_path=save_path
+                    save_path=save_path,
+                    visualization_dir=args.visualization_dir
                 )
                 log_string('可视化完成')
             
