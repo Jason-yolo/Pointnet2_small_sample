@@ -7,6 +7,8 @@ matplotlib>=3.4.0
 scipy>=1.7.0
 h5py>=3.3.0
 Pillow>=8.3.0
+opencv-python>=4.4.0
+plyfile>=0.7.4
 
 # 可选依赖（用于数据可视化）
 open3d>=0.13.0

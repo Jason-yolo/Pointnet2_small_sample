@@ -7,6 +7,12 @@ import logging
 from tqdm import tqdm
 import sys
 import importlib
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# 自动检测CUDA是否可用
+def get_device():
+    return torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = BASE_DIR
@@ -17,6 +23,7 @@ sys.path.append(os.path.join(ROOT_DIR, 'models'))
 --normal 
 --log_dir pointnet2_cls_msg
 """
+# python test_cls.py --single_file "数据文件路径" --log_dir test_200_5cls --normal 
 # python test_cls.py --log_dir test_200_5cls --normal --single_file "data/modelnet5_normal_resampled/bathtub/bathtub_0002.txt" --num_votes 3
 def parse_args():
     '''PARAMETERS'''
@@ -24,16 +31,20 @@ def parse_args():
     parser.add_argument('--batch_size', type=int, default=24, help='batch size in training')
     parser.add_argument('--gpu', type=str, default='0', help='specify gpu device')
     parser.add_argument('--num_point', type=int, default=1024, help='Point Number [default: 1024]')
-    parser.add_argument('--log_dir', type=str, default='my_test', help='Experiment root')              # default='pointnet2_ssg_normal'
+    parser.add_argument('--log_dir', type=str, default='test_200_5cls', help='Experiment root')              # default='pointnet2_ssg_normal'
     parser.add_argument('--normal', dest='normal', action='store_true', default=True, help='Whether to use normal information [default: True]')
     parser.add_argument('--no_normal', dest='normal', action='store_false', help='Disable normal information')
     parser.add_argument('--num_votes', type=int, default=3, help='Aggregate classification scores with voting [default: 3]')
-    parser.add_argument('--single_file', type=str, default=None, help='Path to a single point cloud file for classification')
+    parser.add_argument('--single_file', type=str, default='D:/研究生_study/cloudpoint_learn/Pointnet2_small_sample/data/test/airplane_0501.txt', help='Path to a single point cloud file for classification')
     parser.add_argument('--uniform', action='store_true', default=False, help='Whether to use farthest point sampling for single file [default: False]')
     parser.add_argument('--shape_names_file', type=str, default='modelnet5_shape_names.txt', help='shape names file [default: modelnet5_shape_names.txt]')
     parser.add_argument('--train_file', type=str, default='modelnet5_train.txt', help='training file list [default: modelnet5_train.txt]')
     parser.add_argument('--test_file', type=str, default='modelnet5_test.txt', help='test file list [default: modelnet5_test.txt]')
     parser.add_argument('--data_path', type=str, default='data/modelnet5_normal_resampled/', help='data directory path [default: data/modelnet5_normal_resampled/]')
+    # 添加可视化相关参数
+    parser.add_argument('--visualize', action='store_true', default=True, help='Whether to visualize the point cloud after classification [default: True]') # 是否可视化分类结果
+    parser.add_argument('--save_results', action='store_true', default=False, help='Whether to save classification results to file [default: False]')              # 是否保存分类结果到文件
+    parser.add_argument('--visualization_dir', type=str, default='visualization_results', help='Directory to save visualization results [default: visualization_results]')  # 可视化结果保存目录
     return parser.parse_args()
 
 def test(model, loader, num_class=5, vote_num=1):
@@ -43,9 +54,13 @@ def test(model, loader, num_class=5, vote_num=1):
         points, target = data
         target = target[:, 0]
         points = points.transpose(2, 1)
-        points, target = points.cuda(), target.cuda()
+        # 自动选择设备
+        device = get_device()
+        points, target = points.to(device), target.to(device)
         classifier = model.eval()
-        vote_pool = torch.zeros(target.size()[0],num_class).cuda()
+        # 自动选择设备
+        device = get_device()
+        vote_pool = torch.zeros(target.size()[0], num_class).to(device)
         for _ in range(vote_num):
             pred, _ = classifier(points)
             vote_pool += pred
@@ -110,12 +125,16 @@ def classify_single_file(model, file_path, num_point=1024, normal_channel=True, 
     # 转换为torch tensor并添加batch维度
     point_set = torch.from_numpy(point_set).unsqueeze(0).float()
     point_set = point_set.transpose(2, 1)  # [B, 3/6, N]
-    point_set = point_set.cuda()
+    # 自动选择设备
+    device = get_device()
+    point_set = point_set.to(device)
     
     # 模型推理（投票）
     model.eval()
     num_classes = len(class_names) if class_names else 40
-    vote_pool = torch.zeros(1, num_classes).cuda()
+    # 自动选择设备
+    device = get_device()
+    vote_pool = torch.zeros(1, num_classes).to(device)
     
     with torch.no_grad():
         for _ in range(vote_num):
@@ -135,8 +154,149 @@ def classify_single_file(model, file_path, num_point=1024, normal_channel=True, 
     # 获取类别名称
     pred_class_name = class_names[pred_choice] if class_names else f"Class_{pred_choice}"
     
-    return pred_choice, pred_class_name, confidence, all_probs
+    # 返回结果，包括点云数据用于可视化
+    return pred_choice, pred_class_name, confidence, all_probs, point_set
 
+
+def save_classification_results(file_path, pred_class, pred_class_name, confidence, all_probs, class_names, save_dir='results'):
+    """
+    保存分类结果到文件
+    
+    Args:
+        file_path: 点云文件路径
+        pred_class: 预测的类别索引
+        pred_class_name: 预测的类别名称
+        confidence: 预测置信度
+        all_probs: 所有类别的概率
+        class_names: 类别名称列表
+        save_dir: 结果保存目录
+    """
+    # 创建保存目录
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    
+    # 生成结果文件名
+    file_name = os.path.basename(file_path).replace('.txt', '_results.txt')
+    result_path = os.path.join(save_dir, file_name)
+    
+    # 保存结果
+    with open(result_path, 'w') as f:
+        f.write(f"Point Cloud File: {file_path}\n")
+        f.write(f"Predicted Class: {pred_class_name} (ID: {pred_class})\n")
+        f.write(f"Confidence: {confidence:.4f} ({confidence*100:.2f}%)\n")
+        f.write("\nClass Probabilities:\n")
+        
+        # 保存所有类别的概率
+        for i, prob in enumerate(all_probs):
+            class_name = class_names[i] if i < len(class_names) else f"Class_{i}"
+            f.write(f"{class_name}: {prob:.4f} ({prob*100:.2f}%)\n")
+    
+    return result_path
+
+def visualize_pointcloud_with_prediction(point_cloud, file_path, pred_class, pred_class_name, confidence, class_names, save_path=None):
+    """
+    使用matplotlib可视化点云，并显示分类结果
+    
+    Args:
+        point_cloud: 点云数据 (tensor 格式)
+        file_path: 点云文件路径
+        pred_class: 预测的类别索引
+        pred_class_name: 预测的类别名称
+        confidence: 预测置信度
+        class_names: 类别名称列表
+        save_path: 是否保存可视化结果，如果为None则不保存
+    """
+    # 为每个类别分配不同的颜色
+    colors = np.array([
+        [1, 0, 0],      # 红色
+        [0, 1, 0],      # 绿色
+        [0, 0, 1],      # 蓝色
+        [1, 1, 0],      # 黄色
+        [1, 0, 1],      # 紫色
+        [0, 1, 1],      # 青色
+        [1, 0.5, 0],    # 橙色
+        [0.5, 1, 0],    # 黄绿色
+        [0, 0.5, 1],    # 深蓝色
+        [0.5, 0, 1],    # 蓝紫色
+        [1, 0, 0.5],    # 粉红色
+        [0, 1, 0.5],    # 青绿色
+        [0.5, 0.5, 0],  # 橄榄色
+        [0.5, 0, 0.5],  # 紫色
+        [0, 0.5, 0.5]   # 蓝绿色
+    ])
+    
+    # 将tensor转换为numpy数组
+    if isinstance(point_cloud, torch.Tensor):
+        point_cloud = point_cloud.cpu().numpy()
+    
+    # 调整点云形状 (B×C×N -> N×C)
+    if len(point_cloud.shape) == 3:
+        point_cloud = point_cloud[0].transpose(1, 0)  # 转为 N×C
+    
+    # 只取xyz坐标
+    if point_cloud.shape[1] > 3:
+        point_cloud = point_cloud[:, :3]
+    
+    # 确保颜色索引不会越界
+    color_idx = pred_class % len(colors)
+    color = colors[color_idx]
+    
+    # 创建可视化图形
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111, projection='3d')
+    
+    # 绘制点云
+    scatter = ax.scatter(
+        point_cloud[:, 0], 
+        point_cloud[:, 1], 
+        point_cloud[:, 2], 
+        c=[color],  # 使用预测类别颜色
+        s=10,  # 点的大小
+        alpha=0.8  # 透明度
+    )
+    
+    # 设置坐标轴和标题
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    ax.set_title(f'File: {os.path.basename(file_path)}\nPredicted: {pred_class_name} (Confidence: {confidence:.4f})')
+    
+    # 设置坐标轴范围相等
+    max_range = np.max([
+        point_cloud[:, 0].max() - point_cloud[:, 0].min(),
+        point_cloud[:, 1].max() - point_cloud[:, 1].min(),
+        point_cloud[:, 2].max() - point_cloud[:, 2].min()
+    ]) * 0.5
+    
+    mid_x = (point_cloud[:, 0].max() + point_cloud[:, 0].min()) * 0.5
+    mid_y = (point_cloud[:, 1].max() + point_cloud[:, 1].min()) * 0.5
+    mid_z = (point_cloud[:, 2].max() + point_cloud[:, 2].min()) * 0.5
+    
+    ax.set_xlim(mid_x - max_range, mid_x + max_range)
+    ax.set_ylim(mid_y - max_range, mid_y + max_range)
+    ax.set_zlim(mid_z - max_range, mid_z + max_range)
+    
+    # 显示图例
+    legend_elements = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, 
+                              label=f'{pred_class_name}')]
+    ax.legend(handles=legend_elements, loc='upper right')
+    
+    plt.tight_layout()
+    
+    # 保存结果（如果指定了路径）
+    if save_path:
+        if not os.path.exists(os.path.dirname(save_path)):
+            os.makedirs(os.path.dirname(save_path))
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"可视化结果已保存到: {save_path}")
+    
+    # 显示图形
+    print("\nmatplotlib可视化窗口已打开:")
+    print("  - 拖动鼠标: 旋转视角")
+    print("  - 鼠标滚轮: 缩放")
+    print("  - 's'键: 保存当前视图")
+    print("  - 'q'键: 关闭窗口")
+    plt.show()
 
 def main(args):
     def log_string(str):
@@ -182,10 +342,14 @@ def main(args):
     model_name = os.listdir(logs_dir)[0].split('.')[0]
     MODEL = importlib.import_module(model_name)
 
-    classifier = MODEL.get_model(num_class,normal_channel=args.normal).cuda()
+    # 根据环境自动选择设备
+    device = get_device()
+    classifier = MODEL.get_model(num_class, normal_channel=args.normal).to(device)
 
     checkpoint_path = os.path.join(experiment_dir, 'checkpoints', 'best_model.pth')
-    checkpoint = torch.load(checkpoint_path, weights_only=False)
+    # 自动根据环境加载模型
+    device = get_device()
+    checkpoint = torch.load(checkpoint_path, weights_only=False, map_location=device)
     classifier.load_state_dict(checkpoint['model_state_dict'])
 
     # 加载类别名称
@@ -199,7 +363,11 @@ def main(args):
         log_string('=' * 50)
         
         try:
-            pred_class, pred_class_name, confidence, all_probs = classify_single_file(
+            # 加载原始点云数据用于可视化（保留原始点云）
+            raw_point_cloud = np.loadtxt(args.single_file, delimiter=',').astype(np.float32)
+            
+            # 调用分类函数
+            pred_class, pred_class_name, confidence, all_probs, point_set = classify_single_file(
                 classifier, 
                 args.single_file, 
                 num_point=args.num_point,
@@ -221,6 +389,43 @@ def main(args):
             for i, idx in enumerate(top5_indices):
                 log_string('  %d. %s: %.4f (%.2f%%)' % (i+1, class_names[idx], all_probs[idx], all_probs[idx]*100))
             log_string('=' * 50)
+            
+            # 保存分类结果（如果启用）
+            if args.save_results:
+                result_path = save_classification_results(
+                    args.single_file, 
+                    pred_class, 
+                    pred_class_name, 
+                    confidence, 
+                    all_probs, 
+                    class_names,
+                    save_dir=args.visualization_dir
+                )
+                log_string(f'分类结果已保存到: {result_path}')
+            
+            # 可视化点云（如果启用）
+            if args.visualize:
+                log_string('开始可视化点云...')
+                
+                # 确定保存路径（如果需要保存可视化结果）
+                save_path = None
+                if args.save_results:
+                    save_path = os.path.join(
+                        args.visualization_dir, 
+                        os.path.basename(args.single_file).replace('.txt', '_visualization.png')
+                    )
+                
+                # 调用可视化函数
+                visualize_pointcloud_with_prediction(
+                    point_set,  # 使用处理后的点云进行可视化
+                    args.single_file, 
+                    pred_class, 
+                    pred_class_name, 
+                    confidence, 
+                    class_names,
+                    save_path=save_path
+                )
+                log_string('可视化完成')
             
         except Exception as e:
             log_string('Error during classification: %s' % str(e))

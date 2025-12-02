@@ -74,3 +74,108 @@
 2025-11-21 20:32:10,130 - Model - INFO -   4. bed: 0.0000 (0.00%)
 2025-11-21 20:32:10,130 - Model - INFO -   5. bathtub: 0.0000 (0.00%)
 2025-11-21 20:32:10,130 - Model - INFO - ==================================================
+2025-12-01 23:33:19,586 - Model - INFO - PARAMETER ...
+2025-12-01 23:33:19,586 - Model - INFO - Namespace(batch_size=24, gpu='0', num_point=1024, log_dir='test_200_5cls', normal=True, num_votes=3, single_file='D:\\研究生_study\\cloudpoint_learn\\Pointnet2_small_sample\\data\test\x07irplane_0501.txt', uniform=False, shape_names_file='modelnet5_shape_names.txt', train_file='modelnet5_train.txt', test_file='modelnet5_test.txt', data_path='data/modelnet5_normal_resampled/')
+2025-12-01 23:33:19,586 - Model - INFO - Load dataset ...
+2025-12-01 23:33:19,614 - Model - INFO - Number of classes: 5
+2025-12-01 23:33:20,602 - Model - INFO - ==================================================
+2025-12-01 23:33:20,602 - Model - INFO - Classifying single point cloud file: D:\研究生_study\cloudpoint_learn\Pointnet2_small_sample\data	estirplane_0501.txt
+2025-12-01 23:33:20,602 - Model - INFO - ==================================================
+2025-12-01 23:33:20,603 - Model - INFO - Error during classification: Point cloud file not found: D:\研究生_study\cloudpoint_learn\Pointnet2_small_sample\data	estirplane_0501.txt
+2025-12-01 23:33:20,603 - Model - INFO - Traceback (most recent call last):
+  File "D:\研究生_study\cloudpoint_learn\Pointnet2_small_sample\test_cls.py", line 202, in main
+    pred_class, pred_class_name, confidence, all_probs = classify_single_file(
+  File "D:\研究生_study\cloudpoint_learn\Pointnet2_small_sample\test_cls.py", line 87, in classify_single_file
+    raise FileNotFoundError(f"Point cloud file not found: {file_path}")
+FileNotFoundError: Point cloud file not found: D:\研究生_study\cloudpoint_learn\Pointnet2_small_sample\data	estirplane_0501.txt
+
+2025-12-01 23:34:04,208 - Model - INFO - PARAMETER ...
+2025-12-01 23:34:04,208 - Model - INFO - Namespace(batch_size=24, gpu='0', num_point=1024, log_dir='test_200_5cls', normal=True, num_votes=3, single_file='D:/研究生_study/cloudpoint_learn/Pointnet2_small_sample/data/test/airplane_0501.txt', uniform=False, shape_names_file='modelnet5_shape_names.txt', train_file='modelnet5_train.txt', test_file='modelnet5_test.txt', data_path='data/modelnet5_normal_resampled/')
+2025-12-01 23:34:04,208 - Model - INFO - Load dataset ...
+2025-12-01 23:34:04,211 - Model - INFO - Number of classes: 5
+2025-12-01 23:34:05,091 - Model - INFO - ==================================================
+2025-12-01 23:34:05,091 - Model - INFO - Classifying single point cloud file: D:/研究生_study/cloudpoint_learn/Pointnet2_small_sample/data/test/airplane_0501.txt
+2025-12-01 23:34:05,091 - Model - INFO - ==================================================
+2025-12-01 23:34:07,845 - Model - INFO - ==================================================
+2025-12-01 23:34:07,845 - Model - INFO - Classification Result:
+2025-12-01 23:34:07,845 - Model - INFO -   Predicted Class: airplane (ID: 0)
+2025-12-01 23:34:07,845 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-12-01 23:34:07,846 - Model - INFO - ==================================================
+2025-12-01 23:34:07,846 - Model - INFO - Top 5 Predictions:
+2025-12-01 23:34:07,846 - Model - INFO -   1. airplane: 1.0000 (100.00%)
+2025-12-01 23:34:07,846 - Model - INFO -   2. bench: 0.0000 (0.00%)
+2025-12-01 23:34:07,846 - Model - INFO -   3. bed: 0.0000 (0.00%)
+2025-12-01 23:34:07,846 - Model - INFO -   4. bookshelf: 0.0000 (0.00%)
+2025-12-01 23:34:07,846 - Model - INFO -   5. bathtub: 0.0000 (0.00%)
+2025-12-01 23:34:07,846 - Model - INFO - ==================================================
+2025-12-01 23:44:49,963 - Model - INFO - PARAMETER ...
+2025-12-01 23:44:49,963 - Model - INFO - Namespace(batch_size=24, data_path='data/modelnet5_normal_resampled/', gpu='0', log_dir='test_200_5cls', normal=True, num_point=1024, num_votes=3, save_results=False, shape_names_file='modelnet5_shape_names.txt', single_file='data/test/airplane_0500.txt', test_file='modelnet5_test.txt', train_file='modelnet5_train.txt', uniform=False, visualization_dir='visualization_results', visualize=True)
+2025-12-01 23:44:49,963 - Model - INFO - Load dataset ...
+2025-12-01 23:44:49,968 - Model - INFO - Number of classes: 5
+2025-12-01 23:46:40,612 - Model - INFO - PARAMETER ...
+2025-12-01 23:46:40,613 - Model - INFO - Namespace(batch_size=24, data_path='data/modelnet5_normal_resampled/', gpu='0', log_dir='test_200_5cls', normal=True, num_point=1024, num_votes=3, save_results=False, shape_names_file='modelnet5_shape_names.txt', single_file='data/test/airplane_0500.txt', test_file='modelnet5_test.txt', train_file='modelnet5_train.txt', uniform=False, visualization_dir='visualization_results', visualize=True)
+2025-12-01 23:46:40,613 - Model - INFO - Load dataset ...
+2025-12-01 23:46:40,616 - Model - INFO - Number of classes: 5
+2025-12-01 23:47:04,809 - Model - INFO - PARAMETER ...
+2025-12-01 23:47:04,809 - Model - INFO - Namespace(batch_size=24, data_path='data/modelnet5_normal_resampled/', gpu='0', log_dir='test_200_5cls', normal=True, num_point=1024, num_votes=3, save_results=False, shape_names_file='modelnet5_shape_names.txt', single_file='data/test/airplane_0500.txt', test_file='modelnet5_test.txt', train_file='modelnet5_train.txt', uniform=False, visualization_dir='visualization_results', visualize=True)
+2025-12-01 23:47:04,810 - Model - INFO - Load dataset ...
+2025-12-01 23:47:04,813 - Model - INFO - Number of classes: 5
+2025-12-01 23:47:04,872 - Model - INFO - ==================================================
+2025-12-01 23:47:04,872 - Model - INFO - Classifying single point cloud file: data/test/airplane_0500.txt
+2025-12-01 23:47:04,872 - Model - INFO - ==================================================
+2025-12-01 23:47:06,959 - Model - INFO - ==================================================
+2025-12-01 23:47:06,960 - Model - INFO - Classification Result:
+2025-12-01 23:47:06,961 - Model - INFO -   Predicted Class: airplane (ID: 0)
+2025-12-01 23:47:06,961 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-12-01 23:47:06,961 - Model - INFO - ==================================================
+2025-12-01 23:47:06,961 - Model - INFO - Top 5 Predictions:
+2025-12-01 23:47:06,962 - Model - INFO -   1. airplane: 1.0000 (100.00%)
+2025-12-01 23:47:06,962 - Model - INFO -   2. bench: 0.0000 (0.00%)
+2025-12-01 23:47:06,962 - Model - INFO -   3. bookshelf: 0.0000 (0.00%)
+2025-12-01 23:47:06,963 - Model - INFO -   4. bathtub: 0.0000 (0.00%)
+2025-12-01 23:47:06,963 - Model - INFO -   5. bed: 0.0000 (0.00%)
+2025-12-01 23:47:06,963 - Model - INFO - ==================================================
+2025-12-01 23:47:06,964 - Model - INFO - 开始可视化点云...
+2025-12-01 23:47:12,338 - Model - INFO - 可视化完成
+2025-12-01 23:52:00,841 - Model - INFO - PARAMETER ...
+2025-12-01 23:52:00,841 - Model - INFO - Namespace(batch_size=24, gpu='0', num_point=1024, log_dir='test_200_5cls', normal=True, num_votes=3, single_file='D:/研究生_study/cloudpoint_learn/Pointnet2_small_sample/data/test/airplane_0501.txt', uniform=False, shape_names_file='modelnet5_shape_names.txt', train_file='modelnet5_train.txt', test_file='modelnet5_test.txt', data_path='data/modelnet5_normal_resampled/', visualize=True, save_results=False, visualization_dir='visualization_results')
+2025-12-01 23:52:00,841 - Model - INFO - Load dataset ...
+2025-12-01 23:52:00,844 - Model - INFO - Number of classes: 5
+2025-12-01 23:52:01,765 - Model - INFO - ==================================================
+2025-12-01 23:52:01,765 - Model - INFO - Classifying single point cloud file: D:/研究生_study/cloudpoint_learn/Pointnet2_small_sample/data/test/airplane_0501.txt
+2025-12-01 23:52:01,765 - Model - INFO - ==================================================
+2025-12-01 23:52:03,965 - Model - INFO - ==================================================
+2025-12-01 23:52:03,965 - Model - INFO - Classification Result:
+2025-12-01 23:52:03,965 - Model - INFO -   Predicted Class: airplane (ID: 0)
+2025-12-01 23:52:03,966 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-12-01 23:52:03,966 - Model - INFO - ==================================================
+2025-12-01 23:52:03,966 - Model - INFO - Top 5 Predictions:
+2025-12-01 23:52:03,966 - Model - INFO -   1. airplane: 1.0000 (100.00%)
+2025-12-01 23:52:03,966 - Model - INFO -   2. bed: 0.0000 (0.00%)
+2025-12-01 23:52:03,966 - Model - INFO -   3. bookshelf: 0.0000 (0.00%)
+2025-12-01 23:52:03,966 - Model - INFO -   4. bench: 0.0000 (0.00%)
+2025-12-01 23:52:03,966 - Model - INFO -   5. bathtub: 0.0000 (0.00%)
+2025-12-01 23:52:03,966 - Model - INFO - ==================================================
+2025-12-01 23:52:03,966 - Model - INFO - 开始可视化点云...
+2025-12-01 23:52:09,733 - Model - INFO - 可视化完成
+2025-12-01 23:53:27,468 - Model - INFO - PARAMETER ...
+2025-12-01 23:53:27,468 - Model - INFO - Namespace(batch_size=24, gpu='0', num_point=1024, log_dir='test_200_5cls', normal=True, num_votes=3, single_file='D:/研究生_study/cloudpoint_learn/Pointnet2_small_sample/data/test/airplane_0501.txt', uniform=False, shape_names_file='modelnet5_shape_names.txt', train_file='modelnet5_train.txt', test_file='modelnet5_test.txt', data_path='data/modelnet5_normal_resampled/', visualize=True, save_results=False, visualization_dir='visualization_results')
+2025-12-01 23:53:27,468 - Model - INFO - Load dataset ...
+2025-12-01 23:53:27,470 - Model - INFO - Number of classes: 5
+2025-12-01 23:53:28,398 - Model - INFO - ==================================================
+2025-12-01 23:53:28,398 - Model - INFO - Classifying single point cloud file: D:/研究生_study/cloudpoint_learn/Pointnet2_small_sample/data/test/airplane_0501.txt
+2025-12-01 23:53:28,398 - Model - INFO - ==================================================
+2025-12-01 23:53:30,097 - Model - INFO - ==================================================
+2025-12-01 23:53:30,097 - Model - INFO - Classification Result:
+2025-12-01 23:53:30,097 - Model - INFO -   Predicted Class: airplane (ID: 0)
+2025-12-01 23:53:30,097 - Model - INFO -   Confidence: 1.0000 (100.00%)
+2025-12-01 23:53:30,097 - Model - INFO - ==================================================
+2025-12-01 23:53:30,097 - Model - INFO - Top 5 Predictions:
+2025-12-01 23:53:30,097 - Model - INFO -   1. airplane: 1.0000 (100.00%)
+2025-12-01 23:53:30,097 - Model - INFO -   2. bed: 0.0000 (0.00%)
+2025-12-01 23:53:30,097 - Model - INFO -   3. bookshelf: 0.0000 (0.00%)
+2025-12-01 23:53:30,097 - Model - INFO -   4. bench: 0.0000 (0.00%)
+2025-12-01 23:53:30,098 - Model - INFO -   5. bathtub: 0.0000 (0.00%)
+2025-12-01 23:53:30,098 - Model - INFO - ==================================================
+2025-12-01 23:53:30,098 - Model - INFO - 开始可视化点云...
+2025-12-01 23:55:09,242 - Model - INFO - 可视化完成
